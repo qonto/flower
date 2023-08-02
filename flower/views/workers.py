@@ -27,6 +27,9 @@ class WorkerView(BaseHandler):
                 404,
                 "Unable to get stats for '%s' worker" % name
             )
+        
+        if "conf" in worker and "environ" in worker["conf"]:
+            worker["conf"]["environ"] = "<redacted>"
 
         self.render("worker.html", worker=dict(worker, name=name))
 
@@ -68,7 +71,7 @@ class WorkersView(BaseHandler):
 
             for name in offline_workers:
                 workers.pop(name)
-
+    
         if json:
             self.write(dict(data=list(workers.values())))
         else:
